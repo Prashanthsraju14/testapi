@@ -1,0 +1,36 @@
+# This is an appspec.yml template file for use with an Amazon ECS deployment in CodeDeploy.
+# The lines in this template that start with the hashtag are 
+#   comments that can be safely left in the file or 
+#   ignored.
+# For help completing this file, see the "AppSpec File Reference" in the  
+#   "CodeDeploy User Guide" at
+#   https://docs.aws.amazon.com/codedeploy/latest/userguide/app-spec-ref.html
+version: 0.0
+os: linux
+# In the Resources section, you must specify the following: the Amazon ECS service, task definition name, 
+# and the name and port of the your load balancer to route traffic,
+# target version, and (optional) the current version of your AWS Lambda function. 
+files:
+ - source: /
+   destination: /var/tempbuild/code/testapi
+# - source: systemd/
+#   destination: /etc/systemd/system
+ 
+hooks:
+# Hooks for Amazon ECS deployments are:
+    BeforeInstall: 
+      - location: deploy-scripts/before_install.sh
+        timeout: 120
+        runas: root
+    AfterInstall:
+    - location: deploy-scripts/install.sh
+      timeout: 300
+      runas: root
+#    ApplicationStop:
+#      - location: deploy-scripts/stop_app.sh
+#        timeout: 120
+#        runas: root
+    ApplicationStart:
+      - location: deploy-scripts/start_app.sh
+        timeout: 120
+        runas: root

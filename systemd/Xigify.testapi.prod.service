@@ -1,0 +1,17 @@
+[Unit]
+Description=Xigify testapi Service
+
+[Service]
+WorkingDirectory=/var/www/prod/testapi
+ExecStart=/usr/bin/dotnet /var/www/prod/testapi/Xigify.testapi.Host.dll
+Restart=always
+#Restart service after 10 seconds when crash
+RestartSec=10
+KillSignal=SIGINT
+SyslogIdentifier=webapi
+Environment=ASPNETCORE_ENVIRONMENT=Production
+Environment=DOTNET_PRINT_TELEMETRY_MESSAGE=false
+Environment=ASPNETCORE_URLS=http://*:7009
+
+[Install]
+WantedBy=multi-user.target

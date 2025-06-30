@@ -1,0 +1,51 @@
+version: 0.2
+
+env:
+  variables:
+    DOTNET_VERSION: 9.0
+    SONAR_TOKEN: "b183fb6f93db8c01e2afaff7be009c1386c34b40"
+    SONAR_PROJECT_KEY: "TestApi"
+    SONAR_ORGANIZATION: "your-org"  # 🔁 Replace with your real SonarCloud org
+    SONAR_HOST_URL: "https://sonarcloud.io"
+
+phases:
+  install:
+    runtime-versions:
+      dotnet: $DOTNET_VERSION
+    commands:
+      - echo "📦 Installing dotnet tools..."
+      - dotnet tool install --global dotnet-sonarscanner
+      - dotnet tool install --global dotnet-reportgenerator-globaltool
+      - export PATH="$PATH:/root/.dotnet/tools"
+      - echo "📁 Restoring dependencies..."
+      - dotnet restore
+
+  pre_build:
+    commands:
+      - echo "🔍 Starting SonarCloud analysis..."
+      - dotnet sonarscanner begin /k:"$SONAR_PROJECT_KEY" /o:"$SONAR_ORGANIZATION" /d:sonar.token="$SONAR_TOKEN" /d:sonar.host.url="$SONAR_HOST_URL" /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml"
+
+  build:
+    commands:
+      - echo "🛠️ Building the project..."
+      - dotnet build --no-restore --configuration Release
+      - echo "🧪 Running tests with coverage..."
+      - dotnet test ./TestApi.Tests/ --no-build --configuration Release --collect:"XPlat Code Coverage" --results-directory coverage
+      - echo "📊 Generating HTML coverage report..."
+      - reportgenerator -reports:"coverage/**/coverage.cobertura.xml" -targetdir:"coverage-report" -reporttypes:Html
+      - echo "✅ Completing SonarCloud analysis..."
+      - dotnet sonarscanner end /d:sonar.token="$SONAR_TOKEN"
+
+  post_build:
+    commands:
+      - echo "🚀 Publishing app..."
+      - dotnet publish ./TestApi/TestApi.csproj -c Release -o out
+
+artifacts:
+  files:
+    - appspec.yml
+    - deploy-scripts/**  # Includes all deployment scripts
+    - systemd/**         # Includes systemd service files
+    - out/**/*            # .NET published app
+    - coverage-report/**  # Code coverage HTML report
+    - coverage-report/index.html
