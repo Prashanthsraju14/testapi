@@ -14,7 +14,7 @@ phases:
       dotnet: $DOTNET_VERSION
     commands:
       - echo "📦 Installing dotnet tools..."
-      - export HOME=/root  # Required by dotnet tool install
+      - export HOME=/root  # Required for dotnet tool install
       - export PATH="$PATH:/root/.dotnet/tools"
       - dotnet tool install --global dotnet-sonarscanner
       - dotnet tool install --global dotnet-reportgenerator-globaltool
@@ -24,12 +24,7 @@ phases:
   pre_build:
     commands:
       - echo "🔍 Starting SonarCloud analysis..."
-      - dotnet sonarscanner begin \
-          /k:"$SONAR_PROJECT_KEY" \
-          /o:"$SONAR_ORGANIZATION" \
-          /d:sonar.token="$SONAR_TOKEN" \
-          /d:sonar.host.url="$SONAR_HOST_URL" \
-          /d:sonar.cs.cobertura.reportsPaths="coverage/**/coverage.cobertura.xml"
+      - dotnet sonarscanner begin /k:$SONAR_PROJECT_KEY /o:$SONAR_ORGANIZATION /d:sonar.token=$SONAR_TOKEN /d:sonar.host.url=$SONAR_HOST_URL /d:sonar.cs.cobertura.reportsPaths=coverage/**/coverage.cobertura.xml
 
   build:
     commands:
@@ -40,7 +35,7 @@ phases:
       - echo "📊 Generating HTML coverage report..."
       - reportgenerator -reports:"coverage/**/coverage.cobertura.xml" -targetdir:"coverage-report" -reporttypes:Html
       - echo "✅ Completing SonarCloud analysis..."
-      - dotnet sonarscanner end /d:sonar.token="$SONAR_TOKEN"
+      - dotnet sonarscanner end /d:sonar.token=$SONAR_TOKEN
 
   post_build:
     commands:
