@@ -14,9 +14,10 @@ phases:
       dotnet: $DOTNET_VERSION
     commands:
       - echo "📦 Installing dotnet tools..."
+      - export HOME=/root  # ✅ Fix: Ensure HOME is set for dotnet tools
+      - export PATH="$PATH:/root/.dotnet/tools"
       - dotnet tool install --global dotnet-sonarscanner
       - dotnet tool install --global dotnet-reportgenerator-globaltool
-      - export PATH="$PATH:/root/.dotnet/tools"
       - echo "📁 Restoring dependencies..."
       - dotnet restore
 
@@ -40,12 +41,13 @@ phases:
     commands:
       - echo "🚀 Publishing app..."
       - dotnet publish ./TestApi/TestApi.csproj -c Release -o out
+      - echo "📦 Build complete. Artifacts are ready."
 
 artifacts:
   files:
     - appspec.yml
-    - deploy-scripts/**  # Includes all deployment scripts
-    - systemd/**         # Includes systemd service files
-    - out/**/*            # .NET published app
-    - coverage-report/**  # Code coverage HTML report
+    - deploy-scripts/**     # Includes all deployment scripts
+    - systemd/**            # Includes systemd service files
+    - out/**/*              # .NET published app
+    - coverage-report/**    # Code coverage HTML report
     - coverage-report/index.html
