@@ -24,7 +24,7 @@ phases:
   pre_build:
     commands:
       - echo "🔍 Starting SonarCloud analysis..."
-      - dotnet sonarscanner begin "/k:$SONAR_PROJECT_KEY" "/o:$SONAR_ORGANIZATION" "/d:sonar.token=$SONAR_TOKEN" "/d:sonar.host.url=$SONAR_HOST_URL" "/d:sonar.cs.cobertura.reportsPaths=coverage/coverage.cobertura.xml"
+      - dotnet sonarscanner begin "/k:$SONAR_PROJECT_KEY" "/o:$SONAR_ORGANIZATION" "/d:sonar.token=$SONAR_TOKEN" "/d:sonar.host.url=$SONAR_HOST_URL" "/d:sonar.cs.cobertura.reportsPaths=coverage-report/coverage.cobertura.xml"
 
   build:
     commands:
@@ -38,7 +38,7 @@ phases:
       - reportgenerator -reports:"coverage/**/coverage.cobertura.xml" -targetdir:"coverage-report" -reporttypes:"Cobertura;Html"
 
       - echo "🔎 Checking if coverage file exists:"
-      - find coverage -name "coverage.cobertura.xml"
+      - find coverage-report -name "coverage.cobertura.xml"
 
       - echo "✅ Completing SonarCloud analysis..."
       - dotnet sonarscanner end "/d:sonar.token=$SONAR_TOKEN"
