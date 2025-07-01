@@ -5,7 +5,7 @@ env:
     DOTNET_VERSION: 8.0
     SONAR_TOKEN: "b183fb6f93db8c01e2afaff7be009c1386c34b40"
     SONAR_PROJECT_KEY: "Prashanthsraju14_testapi"
-    SONAR_ORGANIZATION: "prashanthsraju14"  # 🔁 Replace with your real SonarCloud org
+    SONAR_ORGANIZATION: "prashanthsraju14"
     SONAR_HOST_URL: "https://sonarcloud.io"
 
 phases:
@@ -14,7 +14,7 @@ phases:
       dotnet: $DOTNET_VERSION
     commands:
       - echo "📦 Installing dotnet tools..."
-      - export HOME=/root  # ✅ Required for dotnet tool install
+      - export HOME=/root  # Required by dotnet tool install
       - export PATH="$PATH:/root/.dotnet/tools"
       - dotnet tool install --global dotnet-sonarscanner
       - dotnet tool install --global dotnet-reportgenerator-globaltool
@@ -24,7 +24,12 @@ phases:
   pre_build:
     commands:
       - echo "🔍 Starting SonarCloud analysis..."
-      - dotnet sonarscanner begin /k:"$SONAR_PROJECT_KEY" /o:"$SONAR_ORGANIZATION" /d:sonar.token="$SONAR_TOKEN" /d:sonar.host.url="$SONAR_HOST_URL" /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml"
+      - dotnet sonarscanner begin \
+          /k:"$SONAR_PROJECT_KEY" \
+          /o:"$SONAR_ORGANIZATION" \
+          /d:sonar.token="$SONAR_TOKEN" \
+          /d:sonar.host.url="$SONAR_HOST_URL" \
+          /d:sonar.cs.cobertura.reportsPaths="coverage/**/coverage.cobertura.xml"
 
   build:
     commands:
@@ -46,8 +51,8 @@ phases:
 artifacts:
   files:
     - appspec.yml
-    - deploy-scripts/**     # Includes all deployment scripts
-    - systemd/**            # Includes systemd service files
-    - out/**/*              # .NET published app
-    - coverage-report/**    # Code coverage HTML report
+    - deploy-scripts/**
+    - systemd/**
+    - out/**/*
+    - coverage-report/**
     - coverage-report/index.html
