@@ -2,7 +2,7 @@ version: 0.2
 
 env:
   variables:
-    DOTNET_VERSION: 9.0
+    DOTNET_VERSION: 8.0
     SONAR_TOKEN: "b183fb6f93db8c01e2afaff7be009c1386c34b40"
     SONAR_PROJECT_KEY: "TestApi"
     SONAR_ORGANIZATION: "your-org"  # 🔁 Replace with your real SonarCloud org
@@ -14,7 +14,7 @@ phases:
       dotnet: $DOTNET_VERSION
     commands:
       - echo "📦 Installing dotnet tools..."
-      - export HOME=/root  # ✅ Fix: Ensure HOME is set for dotnet tools
+      - export HOME=/root  # ✅ Required for dotnet tool install
       - export PATH="$PATH:/root/.dotnet/tools"
       - dotnet tool install --global dotnet-sonarscanner
       - dotnet tool install --global dotnet-reportgenerator-globaltool
