@@ -4,8 +4,8 @@ env:
   variables:
     DOTNET_VERSION: 8.0
     SONAR_TOKEN: "b183fb6f93db8c01e2afaff7be009c1386c34b40"
-    SONAR_PROJECT_KEY: "TestApi"
-    SONAR_ORGANIZATION: "your-org"  # 🔁 Replace with your real SonarCloud org
+    SONAR_PROJECT_KEY: "Prashanthsraju14_testapi"
+    SONAR_ORGANIZATION: "prashanthsraju14"  # 🔁 Replace with your real SonarCloud org
     SONAR_HOST_URL: "https://sonarcloud.io"
 
 phases:
