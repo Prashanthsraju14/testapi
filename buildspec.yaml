@@ -47,6 +47,7 @@ phases:
     commands:
       - echo "🚀 Publishing app..."
       - dotnet publish ./TestApi/TestApi.csproj -c Release -o out
+      - chmod +x deploy-scripts/*.sh
       - echo "📦 Build complete. Artifacts are ready."
 
 artifacts:
