@@ -51,7 +51,7 @@ phases:
 
 artifacts:
   files:
-    - appspec.yml
+    - appspec.yaml
     - deploy-scripts/**
     - systemd/**
     - out/**/*
