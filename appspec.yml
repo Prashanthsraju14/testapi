@@ -1,0 +1,25 @@
+version: 0.0
+os: linux
+
+files:
+  - source: /
+    destination: /var/tempbuild/code/testapi
+    overwrite: yes
+
+hooks:
+  BeforeInstall:
+    - location: deploy-scripts/before_install.sh
+      timeout: 120
+      runas: root
+
+  AfterInstall:
+    - location: deploy-scripts/install.sh
+      timeout: 300
+      runas: root
+
+  ApplicationStart:
+    - location: deploy-scripts/start_app.sh
+      timeout: 120
+      runas: root
+
+
