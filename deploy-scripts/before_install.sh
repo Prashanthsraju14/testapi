@@ -1,4 +1,4 @@
 #!/bin/bash
-source /var/xigify/config
-rm -rf /var/www/$XIGIFYENV/testapi/*
+source /var/projectenv/config
+rm -rf /var/www/$ENV/testapi/*
 rm -rf /var/tempbuild/code/testapi/*

@@ -1,3 +1,3 @@
 #!/bin/bash
-source /var/xigify/config
-sudo systemctl restart Xigify.testapi.$XIGIFYENV.service
+source /var/projectenv/config
+sudo systemctl restart testapi.$ENV.service
